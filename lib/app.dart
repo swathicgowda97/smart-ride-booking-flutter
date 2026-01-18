@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_ride_booking/ui/dashboard/dashboard_screen.dart';
 
 class SmartRideApp extends StatelessWidget {
   const SmartRideApp({super.key});
@@ -8,18 +9,8 @@ class SmartRideApp extends StatelessWidget {
     return MaterialApp(
       title: 'Smart Ride Booking',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.indigo,
-      ),
-      home: const Scaffold(
-        body: Center(
-          child: Text(
-            'Smart Ride Booking App',
-            style: TextStyle(fontSize: 20),
-          ),
-        ),
-      ),
+      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.indigo),
+      home: const DashboardScreen(),
     );
   }
 }
