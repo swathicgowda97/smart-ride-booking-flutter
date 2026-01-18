@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../state/dashboard/dashboard_provider.dart';
 import '../../models/ride_type.dart';
+import '../trips/add_trip_screen.dart';
+
+
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -14,6 +17,18 @@ class DashboardScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Dashboard'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const AddTripScreen(),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
