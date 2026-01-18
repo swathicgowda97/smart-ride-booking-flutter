@@ -1,16 +1,37 @@
-# smart_ride_booking
+# Smart Ride Booking & Trip Management App
 
-A new Flutter project.
+## Overview
+A Flutter application simulating a real-time ride booking platform
+with live trip updates, offline storage, and dashboard analytics.
 
-## Getting Started
+## Tech Stack
+- Flutter 3.x
+- Riverpod (StateNotifier)
+- Hive (Local Storage)
 
-This project is a starting point for a Flutter application.
+## Architecture
+- UI Layer
+- State Management Layer
+- Repository Layer
+- Local Persistence
 
-A few resources to get you started if this is your first Flutter project:
+## Real-Time Simulation
+Ride status progression is simulated using async state transitions
+inside Riverpod StateNotifiers.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Features
+- Trip booking & management
+- Live ride status updates
+- Real-time dashboard analytics
+- Offline support with Hive
+- In-app notifications
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Testing
+Includes basic unit and widget tests covering:
+- Trip logic
+- UI rendering
+
+## How to Run
+```bash
+flutter pub get
+flutter run
