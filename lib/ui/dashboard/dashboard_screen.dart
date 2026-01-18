@@ -1,17 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../models/trip_status.dart';
 import '../../state/dashboard/dashboard_provider.dart';
 import '../../models/ride_type.dart';
+import '../../state/trip/trip_provider.dart';
 import '../trips/add_trip_screen.dart';
 import '../trips/trips_screen.dart';
 
 
 
-class DashboardScreen extends ConsumerWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    ref.listen(tripProvider, (previous, next) {
+      if (previous == null) return;
+
+      for (int i = 0; i < next.trips.length; i++) {
+        final newTrip = next.trips[i];
+        final oldTrip = previous.trips
+            .firstWhere((t) => t.id == newTrip.id, orElse: () => newTrip);
+
+        if (newTrip.status != oldTrip.status) {
+          _showStatusSnack(newTrip.status);
+        }
+      }
+    });
+  }
+
+  void _showStatusSnack(TripStatus status) {
+    final text = switch (status) {
+      TripStatus.driverAssigned => 'Driver assigned 🚕',
+      TripStatus.rideStarted => 'Ride started ▶️',
+      TripStatus.completed => 'Ride completed ✅',
+      _ => null,
+    };
+
+    if (text != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(text)));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final dashboard = ref.watch(dashboardProvider);
 
     return Scaffold(
@@ -29,7 +70,6 @@ class DashboardScreen extends ConsumerWidget {
         },
         child: const Icon(Icons.add),
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -49,16 +89,20 @@ class DashboardScreen extends ConsumerWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const TripsScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const TripsScreen(),
+                  ),
                 );
               },
               child: const Text('View All Trips'),
             ),
-
             const SizedBox(height: 24),
             const Text(
               'Trips by Ride Type',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 8),
             ...RideType.values.map(
