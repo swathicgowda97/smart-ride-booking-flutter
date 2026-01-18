@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../state/dashboard/dashboard_provider.dart';
 import '../../models/ride_type.dart';
 import '../trips/add_trip_screen.dart';
+import '../trips/trips_screen.dart';
 
 
 
@@ -43,6 +44,17 @@ class DashboardScreen extends ConsumerWidget {
               title: 'Total Spent',
               value: '₹${dashboard.totalSpent.toStringAsFixed(2)}',
             ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const TripsScreen()),
+                );
+              },
+              child: const Text('View All Trips'),
+            ),
+
             const SizedBox(height: 24),
             const Text(
               'Trips by Ride Type',
