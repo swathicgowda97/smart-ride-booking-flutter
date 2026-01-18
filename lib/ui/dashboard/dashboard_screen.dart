@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../models/trip_status.dart';
-import '../../state/dashboard/dashboard_provider.dart';
 import '../../models/ride_type.dart';
+import '../../state/dashboard/dashboard_provider.dart';
 import '../../state/trip/trip_provider.dart';
 import '../trips/add_trip_screen.dart';
 import '../trips/trips_screen.dart';
-
-
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -17,31 +16,11 @@ class DashboardScreen extends ConsumerStatefulWidget {
 }
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
-
-  @override
-  void initState() {
-    super.initState();
-
-    ref.listen(tripProvider, (previous, next) {
-      if (previous == null) return;
-
-      for (int i = 0; i < next.trips.length; i++) {
-        final newTrip = next.trips[i];
-        final oldTrip = previous.trips
-            .firstWhere((t) => t.id == newTrip.id, orElse: () => newTrip);
-
-        if (newTrip.status != oldTrip.status) {
-          _showStatusSnack(newTrip.status);
-        }
-      }
-    });
-  }
-
   void _showStatusSnack(TripStatus status) {
     final text = switch (status) {
-      TripStatus.driverAssigned => 'Driver assigned 🚕',
-      TripStatus.rideStarted => 'Ride started ▶️',
-      TripStatus.completed => 'Ride completed ✅',
+      TripStatus.driverAssigned => 'Driver assigned',
+      TripStatus.rideStarted => 'Ride started',
+      TripStatus.completed => 'Ride completed',
       _ => null,
     };
 
@@ -53,6 +32,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ✅ Riverpod listen MUST be inside build
+    ref.listen(tripProvider, (previous, next) {
+      if (previous == null) return;
+
+      for (final newTrip in next.trips) {
+        final oldTrip = previous.trips
+            .firstWhere((t) => t.id == newTrip.id, orElse: () => newTrip);
+
+        if (newTrip.status != oldTrip.status) {
+          _showStatusSnack(newTrip.status);
+        }
+      }
+    });
+
     final dashboard = ref.watch(dashboardProvider);
 
     return Scaffold(
